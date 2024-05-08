@@ -35,7 +35,7 @@ void AWallBuilderController::BeginPlay()
     WallSplineActor.Add(NewObject<AWallSpline>(this));
     if (!WallSplineActor[0])
     {
-        GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("Failed to Spawn WallSplineActor"));
+        //GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("Failed to Spawn WallSplineActor"));
     }
 
     ShowText.BindUFunction(this,"ShowWallWidget");
@@ -102,8 +102,9 @@ void AWallBuilderController::UndoWall() {
 }
 void AWallBuilderController::DeleteWall() {
     //GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Emerald, TEXT("Delete Logic Triggered"));
-    int CurrentWallSplineObject = WallSplineActor[WallSplineActor.Num() - 1]->Destroy();
-    WallSplineActor[WallSplineActor.Num() - 1]->SplineComponent->ClearSplinePoints();
+    WallSplineActor[WallSplineActor.Num() - 1]->Destroy();
+    ShowText.ExecuteIfBound("Deleted Current Wall");
+    //WallSplineActor[WallSplineActor.Num() - 1]->SplineComponent->ClearSplinePoints();
     WallSplineActor.RemoveAt(WallSplineActor.Num() - 1);
     if (WallSplineActor.Num() == 0) {
         WallSplineActor.Add(NewObject<AWallSpline>(this));
@@ -111,10 +112,12 @@ void AWallBuilderController::DeleteWall() {
 
 }
 void AWallBuilderController::ClearWalls() {
-    for (int i = 0; i < WallSplineActor.Num() - 1; i++) {
-        int CurrentWallSplineObject = WallSplineActor[i]->Destroy();
-        WallSplineActor[i]->SplineComponent->ClearSplinePoints();
+    //GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Emerald, TEXT("Delete All Triggered"));
+    for (int i = 0; i < WallSplineActor.Num(); i++) {
+        WallSplineActor[i]->Destroy();
+        //WallSplineActor[i]->SplineComponent->ClearSplinePoints();
     }
+    ShowText.ExecuteIfBound("Deleted All Walls");
     WallSplineActor.Empty();
     WallSplineActor.Add(NewObject<AWallSpline>(this));
 }
